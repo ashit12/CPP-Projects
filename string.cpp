@@ -28,15 +28,15 @@ class String {
     }
 
 public:
-     String() = default;
+      String() = default;
 
-     char& operator[](const size_t index) {
+      char& operator[](const size_t index) {
          return *(m_data + index);
-     }
+      }
 
-    const char& operator[](const size_t index) const {
+     const char& operator[](const size_t index) const {
         return *(m_data+index);
-    }
+     }
 
      String(const char* str) {
         const size_t n = strlen(str);
@@ -153,11 +153,18 @@ public:
         --m_size;
     }
 
-    [[nodiscard]] char* begin() const {
+    [[nodiscard]] char* begin() {
         return m_data;
     }
-    [[nodiscard]] char* end() const {
+    [[nodiscard]] const char* begin() const {
+          return m_data;
+    }
+
+    [[nodiscard]] char* end() {
         return m_data + m_size;
+    }
+    [[nodiscard]]const char* end() const {
+          return m_data + m_size;
     }
 
     [[nodiscard]] char& front() {
