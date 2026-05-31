@@ -1,0 +1,12 @@
+{
+    // Hand IntelliSense off to clangd — cpptools' own engine lags on C++20 stdlib
+    "C_Cpp.intelliSenseEngine": "disabled",
+
+    // Point clangd at the CMake-generated compile_commands.json
+    "clangd.arguments": [
+        "--compile-commands-dir=${workspaceFolder}/build",
+        "--background-index",
+        "--clang-tidy",
+        "--completion-style=detailed"
+    ]
+}

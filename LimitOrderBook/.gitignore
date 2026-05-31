@@ -21,7 +21,10 @@ bench
 tests
 
 # ── IDE & editor ──────────────────────────────────────────────────────────────
-.vscode/
+# Track project-wide clangd/IntelliSense config; ignore personal/generated files
+.vscode/*
+!.vscode/c_cpp_properties.json
+!.vscode/settings.json
 .idea/
 *.xcodeproj/
 *.xcworkspace/
