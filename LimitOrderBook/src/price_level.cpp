@@ -10,12 +10,13 @@ void PriceLevel::add(const Order &order) {
 }
 
 bool PriceLevel::cancel(OrderId id) {
-  if (!orderMap.contains(id))
-    return false;
-
-  orders.erase(orderMap[id]);
-  orderMap.erase(id);
-  return true;
+  auto it = orderMap.find(id);
+  if (it != orderMap.end()) {
+    orders.erase(it->second);
+    orderMap.erase(it);
+    return true;
+  }
+  return false;
 }
 
 void PriceLevel::modifyFrontQuantity(Quantity qty) {

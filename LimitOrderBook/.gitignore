@@ -16,10 +16,6 @@ compile_commands.json   # keep if you symlink it to root for clangd
 *.o
 *.obj
 
-# Executables (matches bench, tests, and any debug binaries)
-bench
-tests
-
 # ── IDE & editor ──────────────────────────────────────────────────────────────
 # Track project-wide clangd/IntelliSense config; ignore personal/generated files
 .vscode/*

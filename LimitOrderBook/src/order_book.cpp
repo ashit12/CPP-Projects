@@ -18,22 +18,22 @@ Quantity OrderBook::match(const Order &order) {
           filled += orderQuantity;
           break;
         } else if (orderQuantity == priceLevel.peek().quantity) {
-          priceLevel.pop();
+          auto frontOrder = priceLevel.pop();
           filled += orderQuantity;
           if (priceLevel.isEmpty()) {
             it = asks.erase(it);
           }
+          orderIndex.erase(frontOrder.id);
           break;
         } else {
           auto frontOrder = priceLevel.pop();
           filled += frontOrder.quantity;
           orderQuantity -= frontOrder.quantity;
+          orderIndex.erase(frontOrder.id);
           if (priceLevel.isEmpty()) {
             it = asks.erase(it);
             if (it == asks.end())
               break;
-          } else {
-            it++;
           }
         }
       } else {
@@ -50,7 +50,8 @@ Quantity OrderBook::match(const Order &order) {
           filled += orderQuantity;
           break;
         } else if (orderQuantity == priceLevel.peek().quantity) {
-          priceLevel.pop();
+          auto frontOrder = priceLevel.pop();
+          orderIndex.erase(frontOrder.id);
           filled += orderQuantity;
           if (priceLevel.isEmpty()) {
             it = bids.erase(it);
@@ -60,12 +61,11 @@ Quantity OrderBook::match(const Order &order) {
           auto frontOrder = priceLevel.pop();
           filled += frontOrder.quantity;
           orderQuantity -= frontOrder.quantity;
+          orderIndex.erase(frontOrder.id);
           if (priceLevel.isEmpty()) {
             it = bids.erase(it);
             if (it == bids.end())
               break;
-          } else {
-            it++;
           }
         }
       } else {
@@ -90,20 +90,24 @@ OrderId OrderBook::add(const Order &order) {
 }
 
 void OrderBook::cancel(OrderId id) {
-  if (!orderIndex.contains(id))
-    return;
+  auto order = orderIndex.find(id);
 
-  auto [side, price] = orderIndex[id];
-  if (side == Side::Sell) {
-    asks[price].cancel(id);
-    if (asks[price].isEmpty())
-      asks.erase(price);
-  } else {
-    bids[price].cancel(id);
-    if (bids[price].isEmpty())
-      bids.erase(price);
+  if(order != orderIndex.end())
+  {
+    auto [side, price] = order->second;
+    if (side == Side::Sell) {
+      auto level = asks.find(price);
+      level->second.cancel(id);
+      if (level->second.isEmpty())
+        asks.erase(level);
+    } else {
+      auto level = bids.find(price);
+      level->second.cancel(id);
+      if (level->second.isEmpty())
+        bids.erase(level);
+    }
+    orderIndex.erase(order);
   }
-  orderIndex.erase(id);
 }
 
 std::optional<Price> OrderBook::getBestAsk() const {

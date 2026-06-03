@@ -15,6 +15,11 @@ enum class Side : std::uint8_t {
     Sell,
 };
 
+enum class CommandType : std::uint8_t {
+    Add,
+    Cancel,
+};
+
 struct Order
 {
     Price price;
@@ -22,6 +27,12 @@ struct Order
     Quantity quantity;
     OrderId id;
     Side side;
+};
+
+struct Command
+{
+    CommandType type;
+    Order order;
 };
 
 

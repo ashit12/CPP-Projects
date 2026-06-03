@@ -32,6 +32,12 @@ target_include_directories(lob PUBLIC include)
 add_executable(bench bench/bench_main.cpp)
 target_link_libraries(bench PRIVATE lob)
 
+target_compile_options(lob PRIVATE
+    -O3
+    -march=native
+    -fno-exceptions
+)
+
 # ── Test executable ───────────────────────────────────────────────────────────
 enable_testing()
 
