@@ -13,8 +13,9 @@ public:
       for (; i < size; i++)
         std::construct_at(m_data + i, val);
     } catch (...) {
-      for (size_t j = 0; j < i; j++) {
-        std::destroy_at(m_data + j);
+      while (i > 0) {
+        --i;
+        std::destroy_at(m_data + i);
       }
       operator delete[](m_data);
       throw;
@@ -33,8 +34,9 @@ public:
         ++i;
       }
     } catch (...) {
-      for (size_t j = 0; j < i; ++j) {
-        std::destroy_at(m_data + j);
+      while (i > 0) {
+        --i;
+        std::destroy_at(m_data + i);
       }
       operator delete[](m_data);
       throw;
@@ -50,8 +52,9 @@ public:
         ++i;
       }
     } catch (...) {
-      for (size_t j = 0; j < i; ++j) {
-        std::destroy_at(m_data + j);
+      while (i > 0) {
+        --i;
+        std::destroy_at(m_data + i);
       }
       operator delete[](m_data);
       throw;
@@ -78,7 +81,8 @@ public:
       return *this;
     }
 
-    for (size_t i = 0; i < m_size; ++i) {
+    for (size_t i = m_size; i > 0; ) {
+      --i;
       std::destroy_at(m_data + i);
     }
     operator delete[](m_data);
@@ -178,7 +182,8 @@ public:
       std::construct_at(new_m_data + i, std::move(m_data[i]));
     }
 
-    for (size_t j = 0; j < m_size; ++j) {
+    for (size_t j = m_size; j > 0; ) {
+      --j;
       std::destroy_at(m_data + j);
     }
     operator delete[](m_data);
@@ -188,7 +193,8 @@ public:
   }
 
   void clear() noexcept {
-    for (size_t i = 0; i < m_size; ++i) {
+    for (size_t i = m_size; i > 0; ) {
+      --i;
       std::destroy_at(m_data + i);
     }
     m_size = 0;
@@ -237,7 +243,8 @@ public:
     for (size_t i = 0; i < m_size; i++) {
       std::construct_at(new_m_data + i, std::move(m_data[i]));
     }
-    for (size_t j = 0; j < m_size; ++j) {
+    for (size_t j = m_size; j > 0; ) {
+      --j;
       std::destroy_at(m_data + j);
     }
     operator delete[](m_data);
@@ -246,7 +253,8 @@ public:
   }
 
   ~Vector() {
-    for (size_t j = 0; j < m_size; ++j) {
+    for (size_t j = m_size; j > 0; ) {
+      --j;
       std::destroy_at(m_data + j);
     }
     operator delete[](m_data);
